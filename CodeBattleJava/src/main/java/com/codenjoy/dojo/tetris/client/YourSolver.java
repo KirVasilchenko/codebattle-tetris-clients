@@ -32,6 +32,7 @@ import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Command;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
+import com.codenjoy.dojo.tetris.model.Elements;
 
 /**
  * User: your name
@@ -47,6 +48,8 @@ public class YourSolver extends AbstractJsonSolver<Board> {
         this.dice = dice;
     }
 
+    public SolutionManager solutionManager = new SolutionManager();
+
     @Override
     public String getAnswer(Board board) {
         List<Command> answerList = getAnswerList(board);
@@ -56,18 +59,14 @@ public class YourSolver extends AbstractJsonSolver<Board> {
 
     private List<Command> getAnswerList(Board board) {
         System.out.println(board.getGlass().getAt(board.getCurrentFigurePoint()));
-        List<Command> result = new ArrayList<Command>();
-        result.add(Command.LEFT);
-        result.add(Command.random(dice));
-        result.add(Command.ROTATE_CLOCKWISE_180);
-
+        List<Command> result = solutionManager.getAction(board);
         return result;
     }
 
     public static void main(String[] args) {
         WebSocketRunner.runClient(
                 // скопируйте сюда адрес из браузера, на который перейдете после регистрации/логина
-                "http://localhost:8080/codenjoy-contest/board/player/ziwpjz46y4z5567k7uup?code=3867579515136108220&gameName=tetris",
+                "http://codebattle2020.westeurope.cloudapp.azure.com/codenjoy-contest/board/player/9qpdfoygew88ode9axes?code=6362058636673599075&gameName=tetris",
                 new YourSolver(new RandomDice()),
                 new Board());
     }
